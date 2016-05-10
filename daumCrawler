@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
@@ -30,8 +31,8 @@ class MyCrawler(scrapy.Spider):
 
         results = zip(realTitle, realUrl)
         for title, url in results:
-            #rank = rank + 1
-            #print rank +
+            rank = rank + 1
+            print ("%d위 :" %rank),
             print title, url
 
 process = CrawlerProcess({
