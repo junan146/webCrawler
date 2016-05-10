@@ -27,7 +27,6 @@ class NaverWeatherCrawler(scrapy.Spider):
             if i < len(date):
                 date1[i-1] = date[i]
 
-
         results = zip(date1,morn,after)
         for date1,morn,after in results:
             print date1,morn,after
