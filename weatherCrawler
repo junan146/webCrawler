@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+
+import scrapy
+from scrapy.crawler import CrawlerProcess
+
+
+class NaverWeatherCrawler(scrapy.Spider):
+    name = 'weather rain'
+    start_urls = ['http://weather.naver.com/period/weeklyFcast.nhn']
+
+    def parse(self, response):
+        query_weather = '#content > table.tbl_type5.tbl_wk'
+        # print response.css(query_weather).extract()
+
+        # rank = response.css('#regularTeamRecordList_table > tr > th > strong::text').extract()
+        weather = response.css('#content > table.tbl_type5.tbl_wk > tbody > tr:nth-child(2) > td > img::attr(alt)').extract()
+        date = response.css('#content > table.tbl_type5.tbl_wk > thead > tr:nth-child(1) > th::text').extract()
+        date1 = [None]*6
+        morn = ['']*6
+        after = ['']*6
+        for i in range(0,len(weather)):
+            if i%2 ==0:
+                morn[i/2]=weather[i]
+            else:
+                after[i/2]=weather[i]
+        for i in range(1,len(date)):
+            if i < len(date):
+                date1[i-1] = date[i]
+
+
+        results = zip(date1,morn,after)
+        for date1,morn,after in results:
+            print date1,morn,after
+
+process = CrawlerProcess({
+    'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+})
+
+process.crawl(NaverWeatherCrawler)
+process.start()
