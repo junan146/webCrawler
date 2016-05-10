@@ -2,7 +2,6 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 
 
-
 class NaverBaseballCrawler(scrapy.Spider):
     name = 'baseball rank'
     start_urls = ['http://sports.news.naver.com/kbaseball/record/index.nhn']
