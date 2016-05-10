@@ -1,0 +1,26 @@
+import scrapy
+from scrapy.crawler import CrawlerProcess
+
+
+class NaverBaseballCrawler(scrapy.Spider):
+    name = 'baseball rank'
+    start_urls = ['http://sports.news.naver.com/kbaseball/record/index.nhn']
+
+    def parse(self, response):
+        query_record = '#regularTeamRecordList_table'
+        #print response.css(query_record).extract()
+
+        rank = response.css('#regularTeamRecordList_table > tr > th > strong::text').extract()
+        teamName = response.css('#regularTeamRecordList_table > tr > td > div > span::text').extract()
+        gameBehind = response.css('#regularTeamRecordList_table > tr > td:nth-child(8) > span::text').extract()
+        cons = response.css('#regularTeamRecordList_table > tr > td:nth-child(9) > span::text').extract()
+
+        results = zip(rank,teamName,gameBehind,cons)
+        for rank,teamName,gameBehind,cons in results:
+            print rank,teamName,gameBehind,cons
+process = CrawlerProcess({
+    'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+})
+
+process.crawl(NaverBaseballCrawler)
+process.start()
